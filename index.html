@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="دير آبان">
+<meta name="theme-color" content="#1d2019">
 <title>قرية دير آبان ثلاثية الأبعاد</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -506,6 +513,7 @@ body:not(.menu-closed) #quickBar, body.wk-on #quickBar, body.menu-closed #menuBt
     <summary>ما هو موثّق وما هو إعادة بناء</summary>
     <h4>سجل التعديلات</h4>
     <ul>
+      <li>١٧ تشرين الأول ٢٠٢٦ (المستخدم): ملء الشاشة دون شرح للزائر: على أندرويد والحاسوب تمتلئ الشاشة عند أول لمسة؛ وعلى آيفون تظهر مرة واحدة ملاحظة «إضافة إلى الشاشة الرئيسية»، فتفتح الصفحة من الأيقونة بلا شريط.</li>
       <li>١٧ تشرين الأول ٢٠٢٦ (المستخدم): عين مرجلين نبع كبير فصار شكلها ضعف حجم العيون الأخرى (وأُزيل الحوض الصغير القديم داخلها)؛ وأُضيف شكل نبع عند عين الخسفة في وسط منطقتها المحتملة؛ وأُزيلت «جفرة» من جولة الخرب والعيون والآبار ومن دبوس المحطة حتى تُفحص خارطة ص٣٠٠.</li>
       <li>١٧ تشرين الأول ٢٠٢٦ (المستخدم): أشكال جديدة على صور المستخدم: الخرب بيوت مهدّمة من حجارة مربعة بغرف وحجارة متساقطة؛ والمغاور كومة صخرية بشجيرات وفتحة مقوّسة وممر؛ والعيون بركة محاطة بالحجارة يجري منها جدول بين الصخور والعشب. وتحصينات دبة الطنطورة جدار من حجارة مرصوفة كما في صورة ص٢ بدل أكياس الرمل. وخريطة الزيتون مخزنة مختصرة (الحجم أقل من ٥ ميغابايت، والأشجار في أماكنها).</li>
       <li>١٧ تشرين الأول ٢٠٢٦ (المستخدم): تبدأ كل الجولات بالسرعة ×١٠؛ وزر السرعة يبطئها: ×١٠ ← ×٥ ← ×٣ ← ×٢ ← ×١ ثم يعود إلى ×١٠.</li>
@@ -3539,6 +3547,23 @@ stage.addEventListener('pointerdown', () => { if (NARROW.matches && !panel.class
 { const w = wk('welcome'), close = () => { w.hidden = true; };
   wk('wlGo').addEventListener('click', close); addEventListener('keydown', e => { if (e.key === 'Escape' && !w.hidden) close(); });
   wk('aboutBtn').addEventListener('click', () => { w.hidden = false; }); }
+{ const d = document, el = d.documentElement, isTop = (() => { try { return window.self === window.top; } catch (e) { return false; } })();   // v86 (the user): full screen at the first tap; a one-time note on iPhone
+  const app = matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches || navigator.standalone === true;
+  if (isTop && !app && (d.fullscreenEnabled || d.webkitFullscreenEnabled)) { let done = false;
+    const go = () => { if (done) return; done = true; ['pointerup', 'click'].forEach(ev => removeEventListener(ev, go, true));
+      if (!(d.fullscreenElement || d.webkitFullscreenElement)) { try { const p = (el.requestFullscreen || el.webkitRequestFullscreen).call(el); if (p && p.catch) p.catch(() => {}); } catch (e) {} } };
+    ['pointerup', 'click'].forEach(ev => addEventListener(ev, go, true)); }
+  if (isTop && !app && /iPhone|iPod/.test(navigator.userAgent)) { let seen = false; try { seen = localStorage.getItem('daIosHint') === '1'; } catch (e) {}
+    const show = () => { const ar = el.lang === 'ar', n = d.createElement('div'), x = d.createElement('button');
+      n.setAttribute('role', 'status'); n.id = 'iosHint';
+      n.style.cssText = 'position:fixed;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2147483000;background:rgba(29,32,25,.95);color:#f3ecd9;font:15px/1.5 system-ui,sans-serif;padding:12px 14px;padding-inline-end:42px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.35);direction:' + (ar ? 'rtl' : 'ltr');
+      n.textContent = ar ? 'لعرض النموذج بكامل الشاشة: اضغط زر المشاركة في Safari (المربع والسهم)، ثم «إضافة إلى الشاشة الرئيسية»، وافتحه من الأيقونة.' : 'For full screen: tap Share in Safari (the square with the arrow), then "Add to Home Screen", and open it from the icon.';
+      x.textContent = '×'; x.setAttribute('aria-label', ar ? 'إغلاق' : 'Close');
+      x.style.cssText = 'position:absolute;top:6px;inset-inline-end:6px;background:none;border:0;color:inherit;font-size:24px;line-height:1;padding:4px 8px;cursor:pointer';
+      const close = () => { n.remove(); };
+      x.addEventListener('click', e => { e.stopPropagation(); close(); }); n.appendChild(x); d.body.appendChild(n);
+      try { localStorage.setItem('daIosHint', '1'); } catch (e) {} setTimeout(close, 15000); };
+    if (!seen) { const wl = d.getElementById('welcome'), t = setInterval(() => { if (!wl || wl.hidden) { clearInterval(t); setTimeout(show, 1500); } }, 500); } } }   // after the welcome screen, so the Enter button stays clear
 { const d = document, el = d.documentElement, fb = wk('fsBtn'), on = () => d.fullscreenElement || d.webkitFullscreenElement;
   if (d.fullscreenEnabled || d.webkitFullscreenEnabled) { fb.hidden = false;
     fb.addEventListener('click', () => { if (on()) (d.exitFullscreen || d.webkitExitFullscreen).call(d); else (el.requestFullscreen || el.webkitRequestFullscreen).call(el); });
