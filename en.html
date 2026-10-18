@@ -315,6 +315,18 @@ body.wk-on.menu-closed #menuBtn { display: none; }
 #welcome p.wl-p { margin: 0 0 10px; font-size: 15.5px; line-height: 1.75; color: var(--ink); }
 #welcome .wl-num { direction: ltr; unicode-bidi: isolate; white-space: nowrap; font-weight: 700; }
 #welcome .wl-act { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+#welcome .wl-act { justify-content: center; }   /* v89: the Enter button in the middle */
+#menuDock { position: fixed; z-index: 13; display: flex; gap: 8px; direction: ltr; left: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px + var(--dockLift, 0px)); }   /* v89: Hide menu and Today, bottom left */
+#menuDock #menuBtn { position: static; }
+#eraQuick { min-height: 42px; padding: 8px 14px; font-size: 15px; font-weight: 700; border-radius: 21px; box-shadow: var(--shadow); background: var(--panel); }
+body.menu-closed #eraQuick { display: none; }
+#wkResume, #wcResume { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; padding: 6px 12px; }
+@media (max-width: 760px) {
+  #menuDock { left: auto; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); }
+  #eraQuick { order: -1; font-size: 14px; padding: 8px 12px; }
+  .photos { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .photos span { font-size: 11.5px; padding: 4px 5px 5px; }
+}
 #welcome .wl-go { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 9px; padding: 11px 24px; font-size: 17px; font-weight: 700; }
 #welcome .wl-wa { display: inline-flex; align-items: center; gap: 6px; background: #1f9d55; color: #fff; text-decoration: none; border-radius: 9px; padding: 11px 16px; font-size: 15px; font-weight: 600; }
 @media (min-width: 761px) {
@@ -326,7 +338,7 @@ body.wk-on.menu-closed #menuBtn { display: none; }
 }
 @media (max-width: 760px) {
   #toggle { display: none !important; }
-  #panel { max-height: 64vh; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 70px); }
+  #panel { max-height: 40vh; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 70px); }
   #panel.collapsed { transform: translateY(110%); visibility: hidden; overflow: hidden; transition: transform .3s ease, visibility 0s linear .3s; }
   #menuBtn { top: auto; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); }
   #wkCard, #walkCard, #tourEnd { left: 0; right: 0; width: auto; top: auto; bottom: 0; height: 32vh; max-height: none; border-radius: 12px 12px 0 0; border-bottom: 0;
@@ -514,6 +526,7 @@ body:not(.menu-closed) #quickBar, body.wk-on #quickBar, body.menu-closed #menuBt
     <summary>What is documented and what is reconstructed</summary>
     <h4>Change log</h4>
     <ul>
+      <li>18 October 2026 (the user): the al-Wa'ra section card is shorter so it no longer covers the buttons; a "▶ Continue the tour" button when a tour is paused; Hide menu bottom left on a computer, with "The site today, approx.", which goes back to 1948 at any other press; the phone menu is 40% of the screen with three photos to a row; the Enter button centred on the welcome screen.</li>
       <li>18 October 2026 (the user): the button bar sits bottom left on a computer, ordered from the left: Back, Menu, Scenes, Photos, Tours; Back opens the menu at the button you came from, marked, and hiding the menu then with nothing chosen goes to the overview; the al-Wa'ra section closes the menu and Back closes it; touching the view in a tour pauses it and play goes on; the squares and samr spaces are beaten earth, with no paving or wall.</li>
       <li>18 October 2026 (the user): one "↩ Back" button shows after going anywhere from the menu and opens the menu at the last button used; Back in a tour ends it, so hiding the menu no longer resumes it; "approximate area" instead of "approximate area"; the "From the ridge" scene removed.</li>
       <li>17 October 2026 (the user): full screen without explaining it: on Android and computers the page fills the screen at the first tap; on iPhone a one-time note says "Add to Home Screen", and the page then opens from the icon with no bar.</li>
@@ -669,7 +682,7 @@ body:not(.menu-closed) #quickBar, body.wk-on #quickBar, body.menu-closed #menuBt
   <h3 id="wkName"></h3>
   <p id="wkCue"></p>
   <p id="wkSee"></p>
-  <div class="wk-nav"><button id="wkPrev" aria-label="previous">⏮</button><button id="wkPlay" aria-label="play">⏸</button><button id="wkGo" aria-label="play">▶</button><button id="wkFast" aria-label="speed" title="×10 · ×5 · ×3 · ×2 · ×1">⏩</button><button id="wkStop" aria-label="pause">⏸</button><button id="wkNext" aria-label="next">⏭</button><button id="wkEnd" aria-label="end">✕</button><button class="menu-in" data-menu>↩ Back</button></div>
+  <div class="wk-nav"><button id="wkPrev" aria-label="previous">⏮</button><button id="wkPlay" aria-label="play">⏸</button><button id="wkResume" hidden>▶ Continue the tour</button><button id="wkGo" aria-label="play">▶</button><button id="wkFast" aria-label="speed" title="×10 · ×5 · ×3 · ×2 · ×1">⏩</button><button id="wkStop" aria-label="pause">⏸</button><button id="wkNext" aria-label="next">⏭</button><button id="wkEnd" aria-label="end">✕</button><button class="menu-in" data-menu>↩ Back</button></div>
 </div>
 <div id="walkCard" hidden role="region" aria-label="Village walk">
   <div class="wc-top"><span id="wcLeg"></span><span id="wcNum"></span></div>
@@ -678,7 +691,7 @@ body:not(.menu-closed) #quickBar, body.wk-on #quickBar, body.menu-closed #menuBt
   <p id="wcCue"></p>
   <p class="wc-meta"><span id="wcBadge" class="badge"></span></p>
   <div class="wc-nav">
-    <button id="wcPrev">← Back</button><button id="wcNext">Next →</button><button id="wcPlay" hidden>⏸ Pause</button>
+    <button id="wcPrev">← Back</button><button id="wcNext">Next →</button><button id="wcPlay" hidden>⏸ Pause</button><button id="wcResume" hidden>▶ Continue the tour</button>
     <span class="grow"></span>
     <label class="check"><input type="checkbox" id="wcHigh"><span>From above</span></label>
     <button id="wcClose">End walk</button>
@@ -3221,7 +3234,7 @@ function waaraCard(show) {
     const B = en ? { doc: 'documented', approx: 'approximate', search: 'search area', text: 'text only' } : { doc: 'موثّق', approx: 'تقريبي', search: 'منطقة بحث', text: 'نص فقط' };
     const C = { doc: '#2f6690', approx: '#b8691f', search: '#c0504d', text: '#777' };
     el = document.createElement('div'); el.id = 'waaraCard'; el.setAttribute('role', 'dialog');
-    el.style.cssText = 'position:fixed;top:12px;bottom:12px;left:12px;width:min(430px,92vw);overflow:auto;background:rgba(250,247,240,.97);color:#2b2620;border-radius:10px;box-shadow:0 6px 30px rgba(0,0,0,.25);padding:12px 16px 28px;z-index:60;font-size:14px;line-height:1.75;direction:rtl;text-align:right;display:none';
+    el.style.cssText = 'position:fixed;top:12px;max-height:66vh;box-sizing:border-box;left:12px;width:min(430px,92vw);overflow:auto;background:rgba(250,247,240,.97);color:#2b2620;border-radius:10px;box-shadow:0 6px 30px rgba(0,0,0,.25);padding:12px 16px 28px;z-index:60;font-size:14px;line-height:1.75;direction:rtl;text-align:right;display:none';
     let h = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b style="font-size:16px">${en ? "al-Wa'ra section and Dar Abu Salama" : 'قسم الوعرة ودار أبو سلامة'}</b><button id="waaraClose" style="border:0;background:#e8e1d3;border-radius:6px;padding:2px 10px;cursor:pointer">✕</button></div>`;
     if (en) h += '<p style="direction:ltr;text-align:left;font-size:13px;color:#555">Places and routes from the book, with their page numbers. The passages below are quoted in Arabic from the book as compiled by the family.</p>';
     h += WAARA_PLACES.map((q, k) => `<div style="border-top:1px solid #e3dccd;padding:6px 0"><b>${en ? q.en : q.ar}</b> <span style="font-size:12px;color:#fff;background:${C[q.st]};border-radius:4px;padding:0 6px">${B[q.st]}</span> <button data-wk="${k}" style="border:0;background:#e8e1d3;border-radius:5px;padding:0 8px;cursor:pointer">${en ? 'Go' : 'اذهب'}</button><br><small>${en ? q.ne : q.na} · ${en ? 'pp.' : 'ص'} ${q.pg}</small></div>`).join('');
@@ -3544,6 +3557,22 @@ document.querySelectorAll('[data-menu]').forEach(b => b.addEventListener('click'
 { const ms0 = menuSync;   // v88 (the user): hiding the menu right after Back, with nothing chosen, goes to the overview
   menuSync = c => { ms0(c); if (c && backPending) { backPending = false; markFrom(null); goTo('overview'); const ov = document.querySelector('[data-view="overview"]'); if (ov) { ov.setAttribute('aria-pressed', 'true'); lastMenuEl = ov; } } };
   wk('waaraHi').addEventListener('click', () => setTimeout(() => { if (waaraOn) setCollapsed(true); }, 0)); }   // the al-Wa'ra section closes the menu
+{ const mb = wk('menuBtn'), dock = document.createElement('div'), eq = document.createElement('button');   // v89 (the user): Hide menu and a passing "today" button, bottom left on a computer
+  dock.id = 'menuDock'; mb.parentNode.insertBefore(dock, mb); dock.appendChild(mb);
+  eq.id = 'eraQuick'; eq.textContent = document.documentElement.lang === 'ar' ? 'الموقع اليوم تقريباً' : 'The site today, approx.'; eq.setAttribute('aria-pressed', 'false'); dock.appendChild(eq);
+  const setEra = now => { const r = wk(now ? 'eraNow' : 'era48'); if (r.checked) return; r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); };
+  const sync = () => eq.setAttribute('aria-pressed', String(wk('eraNow').checked));
+  document.querySelectorAll('input[name=era]').forEach(r => r.addEventListener('change', sync));
+  eq.addEventListener('click', e => { e.stopPropagation(); setEra(!wk('eraNow').checked); sync(); });
+  document.addEventListener('click', e => { if (!wk('eraNow').checked || e.target.closest('#eraQuick, #eraNow, label[for="eraNow"]')) return;   // any other press goes back to 1948
+    if (e.target.closest('button, label, input, a')) { setEra(false); sync(); } }, true);
+  const place = () => { let lift = 0; if (!NARROW.matches) ['wkCard', 'walkCard', 'tourEnd'].forEach(id => { const c = wk(id); if (c && !c.hidden) lift = Math.max(lift, c.getBoundingClientRect().height + 10); }); dock.style.setProperty('--dockLift', lift + 'px'); };
+  ['wkCard', 'walkCard', 'tourEnd'].forEach(id => new MutationObserver(place).observe(wk(id), { attributes: true, attributeFilter: ['hidden'] }));
+  addEventListener('resize', place); place();
+  const rk = wk('wkResume'), rc = wk('wcResume');   // a paused tour says how to go on
+  rk.addEventListener('click', e => { e.stopPropagation(); if (WK && !WK.play) wk('wkPlay').click(); });
+  rc.addEventListener('click', e => { e.stopPropagation(); if (walkDroneOn && !dronePlay) wc('wcPlay').click(); });
+  setInterval(() => { rk.hidden = !(WK && !WK.play && !wk('wkCard').hidden && wk('tourEnd').hidden); rc.hidden = !(walkDroneOn && !dronePlay && !wc('walkCard').hidden); }, 250); }
 wk('qbMenu').addEventListener('click', e => { e.stopPropagation(); menuAt(null); });
 wk('qbViews').addEventListener('click', e => { e.stopPropagation(); menuAt(H_VIEWS); });
 wk('qbTours').addEventListener('click', e => { e.stopPropagation(); menuAt(H_TOURS); });
