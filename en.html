@@ -342,7 +342,8 @@ body.wk-on.menu-closed #menuBtn { display: none; }
 }
 
 /* v75 (the user): three quick buttons with the menu hidden, Back in the tour card, cards fit their content on phones */
-#quickBar { position: fixed; z-index: 13; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 16px; display: flex; gap: 6px; }
+#quickBar { position: fixed; z-index: 13; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); left: 16px; display: flex; gap: 6px; direction: ltr; }   /* v88: bottom left; Back first on the left */
+button.came-from { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }   /* v88: the button the visitor came back to, as a chosen scene */
 #quickBar button { min-height: 40px; padding: 7px 14px; font-size: 14.5px; font-weight: 700; border-radius: 20px; box-shadow: var(--shadow); background: var(--panel); text-align: center; }
 #quickBar #qbBack { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 #quickBar #qbMenu { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -513,6 +514,7 @@ body:not(.menu-closed) #quickBar, body.wk-on #quickBar, body.menu-closed #menuBt
     <summary>What is documented and what is reconstructed</summary>
     <h4>Change log</h4>
     <ul>
+      <li>18 October 2026 (the user): the button bar sits bottom left on a computer, ordered from the left: Back, Menu, Scenes, Photos, Tours; Back opens the menu at the button you came from, marked, and hiding the menu then with nothing chosen goes to the overview; the al-Wa'ra section closes the menu and Back closes it; touching the view in a tour pauses it and play goes on; the squares and samr spaces are beaten earth, with no paving or wall.</li>
       <li>18 October 2026 (the user): one "↩ Back" button shows after going anywhere from the menu and opens the menu at the last button used; Back in a tour ends it, so hiding the menu no longer resumes it; "approximate area" instead of "approximate area"; the "From the ridge" scene removed.</li>
       <li>17 October 2026 (the user): full screen without explaining it: on Android and computers the page fills the screen at the first tap; on iPhone a one-time note says "Add to Home Screen", and the page then opens from the icon with no bar.</li>
       <li>17 October 2026 (the user): 'Ayn Marjalayn, a large spring, is drawn twice the size of the other springs (the small old basin inside it removed); 'Ayn al-Khasfa gets a spring at the centre of its approximate area; «Jafra» leaves the khirbas, springs and wells tour and the station pin until the p.300 map is checked.</li>
@@ -1452,10 +1454,7 @@ function buildVillage() {
     [[100.8,16.7,7],[-102.2,-14.0,7],[-116.7,7.6,7],[-98.0,15.8,7],[-36.8,-8.2,6],[-78,-8,8]].forEach(([x, z, r]) => disc(x, z, r, 4)); mark(-155, -94.2, 12, 15, -1.498, 4);
     { const R = -1.498, c = Math.cos(R), s = Math.sin(R), P = (a, b) => [-155 + a * c + b * s, -94.2 - a * s + b * c];   // v82-test: the samr space b_145 levelled (2.8 m fall over 15 m)
       const hs = []; for (let a = -6; a <= 6; a += 1) for (let b = -7.5; b <= 7.5; b += 1.5) hs.push(baseHeight(...P(a, b)));
-      const L = (Math.min(...hs) + Math.max(...hs)) / 2; addPad(-155, -94.2, 12, 15, R, L);
-      [[0, 7.75, 12, 0.5], [0, -7.75, 12, 0.5], [6.25, 0, 0.5, 15], [-6.25, 0, 0.5, 15]].forEach(([a, b, w, d]) => {   // a retaining wall where the terrace stands above the old ground
-        const e = []; for (let t = -1; t <= 1.001; t += 0.1) e.push(baseHeight(...P(a + (w > 1 ? t * 6 : 0), b + (d > 1 ? t * 7.5 : 0))));
-        const lo = Math.min(...e); if (L - lo > 0.4) { const [x, z] = P(a, b); TERR.push({ x, z, w, d, rot: R, top: L + 0.35, bottom: lo - 0.3, col: hexLin('#b3a98f') }); } }); }   // v56: the p.253 samr squares stay open (b_107-b_109, b_159, b_160, v1_171; b_145 at Dar al-Abd Salama)
+      const L = (Math.min(...hs) + Math.max(...hs)) / 2; addPad(-155, -94.2, 12, 15, R, L); }   // v88: no retaining wall; the level pad stays   // v56: the p.253 samr squares stay open (b_107-b_109, b_159, b_160, v1_171; b_145 at Dar al-Abd Salama)
     NAMED.filter(n => n.k === 'fig').forEach(n => { disc(n.x, n.z, n.r, 4); FIG_AREAS.push(n); });
     NAMED.filter(n => n.k === 'ruin').forEach(n => { const s0 = spot(n.x, n.z, 11, 9, 0); if (!s0) return;   // v30: larger
       const h = makeHouse(rndN, s0.x, s0.z, { w: 11, d: 9, rot: s0.rot, court: 0, floors: 1, dome: false, kind: 'ruin', col: hexLin('#c9b996') }); h.named = n.a; mark(s0.x, s0.z, 15, 13, s0.rot, 4); SPECIAL.push(h); });
@@ -1586,18 +1585,12 @@ function buildVillage() {
       if (HB.every(o => Math.hypot(o.x - cx, o.z - cz) > 35 || sep(A, o.P))) return [cx, cz, s]; } return null; };
     window.__SQ73 = [[100.8, 16.7, 7], [-102.2, -14.0, 7], [-116.7, 7.6, 7], [-98.0, 15.8, 7], [-36.8, -8.2, 6], [-78, -8, 8]].map(([x, z, r]) => fit(x, z, r));   // v73: the six squares reserved in v56 (data/squares_v56.json), paved like the samr space;
     window.__SQ73.forEach(q => { if (!q) return; const [sx, sz, sw] = q;   // each kept clear of the houses (0.5 m), shrunk or moved up to 8 m where a house is in the way
-    const g = new THREE.PlaneGeometry(sw, sw, 20, 20); g.rotateX(-Math.PI / 2); const pa = g.attributes.position;
-    for (let i = 0; i < pa.count; i++) { const x = pa.getX(i) + sx, z = pa.getZ(i) + sz; pa.setXYZ(i, x, groundY(x, z) + 0.12, z); }
-    g.computeVertexNormals(); const me = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: 0xd2c19b, map: STONE_TEX || stoneTexture(), roughness: 1, metalness: 0, polygonOffset: true, polygonOffsetFactor: -2 }));
-    me.receiveShadow = true; groups.era48.add(me); }); }
+    earthYard(sx, sz, sw, sw, 0, groups.era48); }); }
 
   [[[-192.0, -88.4], [-197.0, -97.1], [-207.9, -69.6]], [[-145.4, -61.1], [-162.3, -74.5]]].forEach(P => {   // v82-test: access paths to H11-1 and H15-1, drawn after the village so no building moves
     const s = []; for (let i = 1; i < P.length; i++) { const a = P[i - 1], b = P[i], n = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1])); for (let k = i > 1 ? 1 : 0; k <= n; k++) s.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); }
     ribbon(s, 1.6, '#bcae90', 0.26, groups.era48); });
-  { const g = new THREE.PlaneGeometry(12, 15, 24, 30); g.rotateX(-Math.PI / 2); g.rotateY(-1.498);   // v72: the samr space at Dar al-Abd Abu Salama (b_145, p.253), paved
-    const pa = g.attributes.position; for (let i = 0; i < pa.count; i++) { const x = pa.getX(i) + -155.0, z = pa.getZ(i) + -94.2; pa.setXYZ(i, x, groundY(x, z) + 0.12, z); }
-    g.computeVertexNormals(); const me = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: 0xd2c19b, map: STONE_TEX || stoneTexture(), roughness: 1, metalness: 0, polygonOffset: true, polygonOffsetFactor: -2 }));
-    me.receiveShadow = true; groups.era48.add(me); }
+  earthYard(-155, -94.2, 12, 15, -1.498, groups.era48);   // v88: the samr space at Dar al-Abd Abu Salama (b_145, p.253), beaten earth
 
   VILLAGE_STATS.byZone = {}; COMP.forEach(c => { const k = c.zone.kind + ':' + c.zone.q; VILLAGE_STATS.byZone[k] = (VILLAGE_STATS.byZone[k] || 0) + 1; });
   // Dar al-'Abd Salama: a candidate search area, not a roof (p.181)
@@ -3537,15 +3530,20 @@ function menuAt(el) { setCollapsed(false); panel.scrollTop = el ? Math.max(0, el
 const prevH2 = el => { while (el && el.tagName !== 'H2') el = el.previousElementSibling; return el; };
 const H_VIEWS = prevH2(wk('freeViews')), H_TOURS = prevH2(wk('walkMan1').parentElement);
 let lastMenuEl = null;   // v87 (the user): one Back for everything; it opens the menu where the visitor last was
+let backPending = false; const markFrom = el => { document.querySelectorAll('.came-from').forEach(b => b.classList.remove('came-from')); if (el) el.classList.add('came-from'); };   // v88
+panel.addEventListener('click', e => { if (e.target.closest('button')) { backPending = false; markFrom(null); } }, true);
 panel.addEventListener('click', e => { const b = e.target.closest('button'); if (b && panel.contains(b) && !['toggle', 'aboutBtn', 'fsBtn'].includes(b.id)) lastMenuEl = b; }, true);
-const backAt = el => { setCollapsed(false); if (!el || !el.getClientRects().length) { panel.scrollTop = 0; return; }
+const backAt = el => { markFrom(el); backPending = true; setCollapsed(false); if (!el || !el.getClientRects().length) { panel.scrollTop = 0; return; }
   const go = () => { panel.scrollTop += el.getBoundingClientRect().top - panel.getBoundingClientRect().top - 70; }; requestAnimationFrame(go); setTimeout(go, 380); };   // again once the menu has opened
 const qbBack = wk('qbBack'), backSync = () => { qbBack.hidden = !(lastMenuEl && panel.classList.contains('collapsed') && wk('wkCard').hidden && wc('walkCard').hidden && wk('tourEnd').hidden); };
-qbBack.addEventListener('click', e => { e.stopPropagation(); backAt(lastMenuEl); });
+qbBack.addEventListener('click', e => { e.stopPropagation(); if (waaraOn) wk('waaraHi').click(); backAt(lastMenuEl); });   // v88: Back closes the al-Wa'ra section first
 new MutationObserver(backSync).observe(panel, { attributes: true, attributeFilter: ['class'] });
 ['wkCard', 'walkCard', 'tourEnd'].forEach(id => new MutationObserver(backSync).observe(wk(id), { attributes: true, attributeFilter: ['hidden'] }));
 document.querySelectorAll('[data-menu]').forEach(b => b.addEventListener('click', e => { e.stopPropagation();   // Back in a tour ends it, then the menu
   wk('tourEnd').hidden = true; if (WK) wkEnd(); if (walkList) walkEnd(); backAt(lastMenuEl || H_TOURS); }));
+{ const ms0 = menuSync;   // v88 (the user): hiding the menu right after Back, with nothing chosen, goes to the overview
+  menuSync = c => { ms0(c); if (c && backPending) { backPending = false; markFrom(null); goTo('overview'); const ov = document.querySelector('[data-view="overview"]'); if (ov) { ov.setAttribute('aria-pressed', 'true'); lastMenuEl = ov; } } };
+  wk('waaraHi').addEventListener('click', () => setTimeout(() => { if (waaraOn) setCollapsed(true); }, 0)); }   // the al-Wa'ra section closes the menu
 wk('qbMenu').addEventListener('click', e => { e.stopPropagation(); menuAt(null); });
 wk('qbViews').addEventListener('click', e => { e.stopPropagation(); menuAt(H_VIEWS); });
 wk('qbTours').addEventListener('click', e => { e.stopPropagation(); menuAt(H_TOURS); });
@@ -3606,10 +3604,11 @@ function initWalker() {
 
   wk('wkEnd').addEventListener('click', wkEnd);
   wk('wkFast').addEventListener('click', () => { WK_MUL = { 10: 5, 5: 3, 3: 2, 2: 1, 1: 10 }[WK_MUL]; wkFastLabel(); });
-  wk('wkPlay').addEventListener('click', () => { if (!WK) return; WK_MUL = WK_DEF; wkFastLabel(); WK.play = !WK.play; WK.follow = true; WK.last = null; if (WK.play && WK.d >= WALKER[WK.t].legs[WK.leg].len && WK.leg === WALKER[WK.t].legs.length - 1) wkStart(WK.t); wk('wkPlay').textContent = WK && WK.play ? '⏸' : '▶'; });
+  wk('wkPlay').addEventListener('click', () => { if (!WK) return; WK.play = !WK.play; WK.follow = true; WK.last = null; if (WK.play && WK.d >= WALKER[WK.t].legs[WK.leg].len && WK.leg === WALKER[WK.t].legs.length - 1) wkStart(WK.t); wk('wkPlay').textContent = WK && WK.play ? '⏸' : '▶'; });
   wk('wkNext').addEventListener('click', () => WK && wkJump(WK.si));
   wk('wkPrev').addEventListener('click', () => WK && wkJump(WK.si - 2));
-  controls.addEventListener('start', () => { if (WK) WK.user = true; });   // v76: the finger turns the view around the walker; the camera keeps following   // the viewer turns the camera: stop following until play is pressed
+  controls.addEventListener('start', () => { if (WK) WK.user = true; });
+  controls.addEventListener('start', () => { if (WK) { if (WK.play) { WK.play = false; wk('wkPlay').textContent = '▶'; } WK.user = false; WK.follow = false; } else if (walkDroneOn && dronePlay) droneStop(); });   // v88 (the user): touching the view pauses the tour; play goes on from there   // v76: the finger turns the view around the walker; the camera keeps following   // the viewer turns the camera: stop following until play is pressed
   document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', wkEnd));
 }
 
@@ -3729,6 +3728,11 @@ function dashRibbon(s, w, col, dash, gap, lift, group) {
     if (acc >= (on ? dash : gap)) { if (on && seg.length > 1) ribbon(seg, w, col, lift, group); on = !on; acc = 0; seg = [s[i]]; }
   }
   if (on && seg.length > 1) ribbon(seg, w, col, lift, group);
+}
+function earthYard(cx, cz, w, d, rot, group) {   // v88 (the user): a square is beaten earth, lighter than the ground, edges fading out; no paving, no edge, no wall
+  const c = Math.cos(rot), s = Math.sin(rot), R = Math.hypot(w, d) / 2 + 3;
+  const inside = m => (x, z) => { const dx = x - cx, dz = z - cz, a = dx * c - dz * s, b = dx * s + dz * c; return Math.abs(a) < w / 2 + m && Math.abs(b) < d / 2 + m; };
+  [[1.6, 0.18], [0.6, 0.22], [-0.6, 0.28]].forEach(([m, op]) => drapeFill(inside(m), cx - R, cx + R, cz - R, cz + R, 1, '#c2aa82', op, group, 0.25));
 }
 function drapeFill(test, x0, x1, z0, z1, g, colHex, opacity, group, lift = 0.6) {
   const pos = [], c = new THREE.Color(colHex);
