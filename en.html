@@ -526,6 +526,7 @@ body:not(.menu-closed) #quickBar, body.wk-on #quickBar, body.menu-closed #menuBt
     <summary>What is documented and what is reconstructed</summary>
     <h4>Change log</h4>
     <ul>
+      <li>19 October 2026 (the user): houses around Dar al-Abd Salama moved by the user's directions (Dar al-Abd Salama, 'Alali Dar Shraym, the house of Hasan Uthman Jadallah, Dar Abu al-Kara'in, Dar Muhammad Salih Sa'ada, the J11-2 and H11-1 groups and F11-1); any that fell on a lane was nudged the least distance; Dar al-Abd Salama faces Dar Sa'ada and Dar Abu al-Kara'in. A new last menu item, "Contact & feedback".</li>
       <li>18 October 2026 (the user): the al-Wa'ra section card is shorter so it no longer covers the buttons; a "▶ Continue the tour" button when a tour is paused; Hide menu bottom left on a computer, with "The site today, approx.", which goes back to 1948 at any other press; the phone menu is 40% of the screen with three photos to a row; the Enter button centred on the welcome screen.</li>
       <li>18 October 2026 (the user): the button bar sits bottom left on a computer, ordered from the left: Back, Menu, Scenes, Photos, Tours; Back opens the menu at the button you came from, marked, and hiding the menu then with nothing chosen goes to the overview; the al-Wa'ra section closes the menu and Back closes it; touching the view in a tour pauses it and play goes on; the squares and samr spaces are beaten earth, with no paving or wall.</li>
       <li>18 October 2026 (the user): one "↩ Back" button shows after going anywhere from the menu and opens the menu at the last button used; Back in a tour ends it, so hiding the menu no longer resumes it; "approximate area" instead of "approximate area"; the "From the ridge" scene removed.</li>
@@ -668,13 +669,19 @@ body:not(.menu-closed) #quickBar, body.wk-on #quickBar, body.menu-closed #menuBt
       <li>The four 1948 photos and the Google Earth views you sent.</li>
     </ul>
   </details>
+  <details id="contactBox">
+    <summary>Contact &amp; feedback</summary>
+    <p>We welcome any information, correction or addition about the history of the village, its houses and its people.</p>
+    <p>Please state the subject, explain the remark or the suggested change, and attach a screenshot if possible, to help locate the place meant.</p>
+    <p>WhatsApp: <span dir="ltr">+971553641833</span></p>
+  </details>
   <p class="hint">Drag to rotate. Right-drag or two-finger drag to pan. Scroll or pinch to zoom.</p>
 </aside>
 <button id="homeHint" hidden>Tap the screen to explore the village</button>
 <div id="quickBar"><button id="qbBack" hidden>↩ Back</button><button id="qbMenu">☰ Menu</button><button id="qbViews">Views</button><button id="qbPhotos">Photos</button><button id="qbTours">Tours</button></div>
 <button id="menuBtn" aria-controls="panel" aria-expanded="true">☰ Menu</button>
 <div id="tourEnd" hidden role="region"><p class="te-k" id="teHead">Tour finished</p><h3 id="teName"></h3><div id="teNextBox"><p class="te-k">Next tour</p><p id="teNext"></p></div><div class="te-nav"><button id="teStart">Start the next tour</button><button id="teAgain">Repeat</button><button id="teClose">Close</button><button class="menu-in" data-menu>↩ Back</button></div></div>
-<div id="welcome" role="dialog" aria-modal="true" aria-labelledby="wlTitle"><div class="wl-card" dir="ltr" style="text-align:left"><h1 id="wlTitle" lang="ar">Dayr Aban</h1><p class="wl-sub">An attempt to rebuild the village in three dimensions</p><span class="wl-beta">Initial release</span><p class="wl-p">This work seeks to rebuild the village of Dayr Aban in three dimensions, based on what Mr Abd al-Aziz Abu Hudba documented in his book "The Village of Dayr Aban", and with the help of historical maps, photographs, testimonies and other sources, to bring back the village's landmarks, houses, quarters, roads and lands.</p><p class="wl-p">However much effort has gone into gathering, checking and linking the information, the work still contains estimates and possible errors. We welcome remarks from the people of the village, and any information and documents they hold, to help correct it, develop it and bring it closer to the village as it really was. This is an initial release, to be updated whenever further information or evidence becomes available.</p><p class="wl-p">Please send remarks by WhatsApp to <span class="wl-num" dir="ltr">+971553641833</span>, explaining the remark and the change you suggest, with a screenshot if possible and any supporting information or documents you have.</p><div class="wl-act"><button class="wl-go" id="wlGo" disabled>Loading the village…</button></div></div></div>
+<div id="welcome" role="dialog" aria-modal="true" aria-labelledby="wlTitle"><div class="wl-card" dir="ltr" style="text-align:left"><h1 id="wlTitle" lang="ar">Dayr Aban</h1><p class="wl-sub">An attempt to rebuild the village in three dimensions</p><span class="wl-beta">Initial release</span><p class="wl-p">This work seeks to rebuild the village of Dayr Aban in three dimensions, based on what Mr Abd al-Aziz Abu Hudba documented in his book "The Village of Dayr Aban", and with the help of historical maps, photographs, testimonies and other sources, to bring back the village's landmarks, houses, quarters, roads and lands.</p><p class="wl-p">However much effort has gone into gathering, checking and linking the information, the work still contains estimates and possible errors. We welcome remarks from the people of the village, and any information and documents they hold, to help correct it, develop it and bring it closer to the village as it really was. This is an initial release, to be updated whenever further information or evidence becomes available.</p><p class="wl-p">Help us complete the historical picture of the village, its people and its houses, and correct any errors. To get in touch and send remarks, see «Contact &amp; feedback» at the end of the menu.</p><div class="wl-act"><button class="wl-go" id="wlGo" disabled>Loading the village…</button></div></div></div>
 
 
 <div id="wkCard" hidden role="region" aria-label="جولة الماشي">
@@ -1572,6 +1579,17 @@ function buildVillage() {
     window.__G2 = G.size; }
   HOUSES.filter(o => o.cid === 'J10-2').forEach(o => reshape36(o, -4.6, -3.86, o.w, o.d, o.court, o.floors));   // v82-test (GPT review): off the Dar Rashid press P41
 
+  { const mv = (k, v, dx, dz) => HOUSES.filter(o => o[k] === v).forEach(o => reshape36(o, dx, dz, o.w, o.d, o.court, o.floors));   // v90 (the user): houses around Dar al-Abd Salama
+    mv('cid', 'J11-2', 30, 0);
+    mv('id', 'I11-1', 5.59, 14.12);
+    mv('id', 'H11-2', 20.83, -3.75);
+    mv('id', 'F11-1', -5.82, -13.89);
+    mv('cid', 'H11-1', -10, 0);
+    mv('id', 'F12-1', 0, 20);
+    mv('id', 'F11-2', -5, 10);
+    const ab = HOUSES.find(o => o.id === 'H12-1'), al = HOUSES.find(o => o.id === 'H11-2');   // faces G11-1 and F12-1; roof level with 'Alali Dar Shraym
+    if (ab) { ab.rot = -1.818; reshape36(ab, -8.89, 13.89, ab.w, ab.d, ab.court, ab.floors); if (al) ab.top = al.top; } }
+
   VILLAGE_STATS.compounds = COMP.length; VILLAGE_STATS.objects = HOUSES.filter(h => h.kind !== 'shed').length; VILLAGE_STATS.special = SPECIAL.length;
   VILLAGE_STATS.dwellings = HOUSES.filter(h => h.kind !== 'shed' && !h.annex).length; VILLAGE_STATS.rooms = HOUSES.filter(h => h.annex === 'room').length; VILLAGE_STATS.annexes = VILLAGE_STATS.rooms + HOUSES.filter(h => h.kind === 'shed').length;
   refreshPads(); renderTerraces();
@@ -1600,7 +1618,7 @@ function buildVillage() {
     window.__SQ73.forEach(q => { if (!q) return; const [sx, sz, sw] = q;   // each kept clear of the houses (0.5 m), shrunk or moved up to 8 m where a house is in the way
     earthYard(sx, sz, sw, sw, 0, groups.era48); }); }
 
-  [[[-192.0, -88.4], [-197.0, -97.1], [-207.9, -69.6]], [[-145.4, -61.1], [-162.3, -74.5]]].forEach(P => {   // v82-test: access paths to H11-1 and H15-1, drawn after the village so no building moves
+  [[[-202.0, -88.4], [-207.0, -97.1], [-217.9, -69.6], [-207.9, -69.6]], [[-145.4, -61.1], [-162.3, -74.5]]].forEach(P => {   // v82-test: access paths to H11-1 and H15-1, drawn after the village so no building moves
     const s = []; for (let i = 1; i < P.length; i++) { const a = P[i - 1], b = P[i], n = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1])); for (let k = i > 1 ? 1 : 0; k <= n; k++) s.push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); }
     ribbon(s, 1.6, '#bcae90', 0.26, groups.era48); });
   earthYard(-155, -94.2, 12, 15, -1.498, groups.era48);   // v88: the samr space at Dar al-Abd Abu Salama (b_145, p.253), beaten earth
